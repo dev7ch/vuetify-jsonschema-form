@@ -1,6 +1,10 @@
 <template>
   <!-- Hide const ? Or make a readonly field -->
-  <div v-if="fullSchema && fullSchema.const === undefined && fullSchema['x-display'] !== 'hidden'" class="vjsf-property">
+  <div v-if="fullSchema && fullSchema.const === undefined && fullSchema['x-display'] !== 'hidden'" class="vjsf-property"
+  :id="fullSchema['x-id'] ? fullSchema['x-id'] : null"
+  :class="fullSchema['x-class'] ? fullSchema['x-class'] : null"
+  :style="fullSchema['x-style'] ? fullSchema['x-style'] : null"
+  >
     <!-- Date picker -->
     <v-menu v-if="fullSchema.type === 'string' && ['date', 'date-time'].includes(fullSchema.format)" ref="menu" v-model="menu" :close-on-content-click="false"
             :nudge-right="40"
@@ -111,7 +115,9 @@
         <template slot="selection" slot-scope="data">
           <div class="v-select__selection v-select__selection--comma">
             <select-icon v-if="itemIcon" :value="data.item" />
-            <span v-if="![null, undefined].includes(data.item)">{{ data.item + (fullSchema.type === 'array' && data.index !== modelWrapper[modelKey].length - 1 ? ',&nbsp;' : '') }}</span>
+            <span v-if="![null, undefined].includes(data.item)">
+              {{ data.item + (fullSchema.type === 'array' && data.index !== modelWrapper[modelKey].length - 1 ? ',&nbsp;' : '') }}
+            </span>
           </div>
         </template>
         <template slot="item" slot-scope="data">
