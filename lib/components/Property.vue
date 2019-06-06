@@ -542,28 +542,15 @@
 
     <!-- Dynamic size array of complex types sub container -->
     <div v-else-if="fullSchema.type === 'array'">
-      <v-layout row class="mt-2 mb-1 pr-1">
-        <v-subheader>{{ label }}</v-subheader>
-        <v-btn v-if="!disabled && !(fromUrl || fullSchema.fromData)" icon color="primary" @click="modelWrapper[modelKey].push(fullSchema.items.default || defaultValue(fullSchema.items)); change(); input()">
-          <v-icon>add</v-icon>
-        </v-btn>
-        <v-spacer />
-        <v-tooltip v-if="fullSchema.description" left>
-          <v-icon slot="activator">
-            info
-          </v-icon>
-          <div class="vjsf-tooltip" v-html="htmlDescription" />
-        </v-tooltip>
-      </v-layout>
-
       <v-container v-if="modelWrapper[modelKey] && modelWrapper[modelKey].length" grid-list-md class="pt-0 px-2">
+        <v-subheader>{{ label }}</v-subheader>
         <v-layout row wrap>
           <draggable v-model="modelWrapper[modelKey]" :options="{handle:'.handle'}" style="width: 100%;">
             <v-flex v-for="(itemModel, i) in modelWrapper[modelKey]" :key="i" xs12>
               <v-card class="array-card">
                 <v-card-title primary-title class="pa-0">
                   <v-btn v-if="!disabled && fullSchema['x-sortable'] !== false" flat icon class="handle">
-                    <v-icon>reorder</v-icon>
+                    <v-icon>drag_indicator</v-icon>
                   </v-btn>
                   <span v-if="itemTitle && modelWrapper[modelKey][i]">{{ modelWrapper[modelKey][i][itemTitle] }}</span>
                   <v-spacer />
@@ -586,6 +573,18 @@
               </v-card>
             </v-flex>
           </draggable>
+        </v-layout>
+        <v-layout row class="mt-2 mb-1 pr-1">
+          <v-btn v-if="!disabled && !(fromUrl || fullSchema.fromData)" icon color="primary" @click="modelWrapper[modelKey].push(fullSchema.items.default || defaultValue(fullSchema.items)); change(); input()">
+            <v-icon>add</v-icon>
+          </v-btn>
+          <v-spacer />
+          <v-tooltip v-if="fullSchema.description" left>
+            <v-icon slot="activator">
+              info
+            </v-icon>
+            <div class="vjsf-tooltip" v-html="htmlDescription" />
+          </v-tooltip>
         </v-layout>
       </v-container>
     </div>
