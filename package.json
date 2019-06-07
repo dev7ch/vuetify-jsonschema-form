@@ -2,31 +2,23 @@
   "name": "@koumoul/vuetify-jsonschema-form",
   "version": "0.27.1",
   "description": "Generate forms for the vuetify UI library (vuejs) based on annotated JSON schemas.",
-  "main": "dist/main.js",
-  "scripts": {
-    "lint": "eslint --ext js,vue .",
-    "build": "rm -rf dist && webpack && cp index.html dist/",
-    "dev": "NODE_ENV=development webpack-dev-server",
-    "prepublish": "npm run lint && npm run build",
-    "postpublish": "gh-pages-multi deploy -v -s dist"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/koumoul-dev/vuetify-jsonschema-form.git"
-  },
   "author": "Alban Mouton <alban.mouton@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/koumoul-dev/vuetify-jsonschema-form/issues"
+  "scripts": {
+    "build": "rm -rf dist && webpack && cp index.html dist/",
+    "lint": "eslint --ext js,vue .",
+    "dev": "NODE_ENV=development webpack-dev-server",
+    "postpublish": "gh-pages-multi deploy -v -s dist",
+    "prepublish": "npm run lint && npm run build"
   },
-  "homepage": "https://github.com/koumoul-dev/vuetify-jsonschema-form#readme",
+  "main": "dist/main.js",
   "dependencies": {
     "markdown-it": "^8.4.2",
     "match-all": "^1.2.5",
     "property-expr": "^1.5.1",
     "vue-color": "^2.7.0",
     "vue-swatches": "^1.0.3",
-    "vuedraggable": "^2.20.0"
+    "vuedraggable": "^2.20.0",
+    "vuetify": "^1.5.14"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",
@@ -48,14 +40,27 @@
     "file-loader": "^3.0.1",
     "hjson": "^3.1.2",
     "mini-css-extract-plugin": "^0.4.5",
+    "sass": "^1.17.4",
+    "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.4",
+    "vue-cli-plugin-vuetify": "https://github.com/vuetifyjs/vue-cli-plugin-vuetify.git#dev",
     "vue-loader": "^15.7.0",
     "vue-template-compiler": "^2.6.10",
     "vuetify": "^1.5.14",
+    "vuetify-loader": "^1.2.2",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.1",
     "webpack-dev-server": "^3.3.1"
+  },
+  "bugs": {
+    "url": "https://github.com/koumoul-dev/vuetify-jsonschema-form/issues"
+  },
+  "homepage": "https://github.com/koumoul-dev/vuetify-jsonschema-form#readme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koumoul-dev/vuetify-jsonschema-form.git"
   }
 }

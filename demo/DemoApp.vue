@@ -28,8 +28,7 @@
                 </v-container>
               </v-flex>
             </v-layout>
-
-            <v-textarea v-model="schemaStr" :error-messages="schemaError ? [schemaError.message] : []" :rows="20" />
+            <v-textarea v-model="schemaStr" :error-messages="schemaError ? [schemaError.message] : []" :rows="40" auto-grow />
           </v-flex>
           <v-flex xs6>
             <h2 class="title my-4">
@@ -48,18 +47,19 @@
             <v-form ref="myForm" v-model="formValid">
               <v-container>
                 <v-layout align-center justify-space-between row>
-              <v-jsonschema-form
-                v-if="schema"
-                :schema="schema"
-                :model="dataObject"
-                :options="{debug: true, disableAll: false, autoFoldObjects: true, context: {owner: {type: 'organization', id: '5a5dc47163ebd4a6f438589b'}}, accordionMode: 'normal'}"
-                @error="e => window.alert(e)"
-                @change="change"
-                @input="input"
-              />
-              </v-layout>
+                  <v-jsonschema-form
+                    v-if="schema"
+                    :schema="schema"
+                    :model="dataObject"
+                    :options="{debug: true, disableAll: false, autoFoldObjects: false, context: {owner: {type: 'organization', id: '5a5dc47163ebd4a6f438589b'}}, accordionMode: 'open'}"
+                    @error="e => window.alert(e)"
+                    @change="change"
+                    @input="input"
+                  />
+                </v-layout>
               </v-container>
             </v-form>
+
             <h2 class="title my-4">
               Data:
             </h2>

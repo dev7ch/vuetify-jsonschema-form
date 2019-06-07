@@ -4,12 +4,11 @@ module.exports = {
     '$id': 'https://example.com/person.schema.json', // Path to defined Schemo or api response
     '$schema': 'http://json-schema.org/draft-07/schema#',
     title: 'ACT',
-    description: 'JSON Schema template example for https://ba14ns21403.fhnw.ch/mediaserver/app/upload/act.php',
+    description: 'Schema template example for <a href="https://ba14ns21403.fhnw.ch/mediaserver/app/upload/act.php">this From</a>',
     type: 'object',
     allOf: [
-      { $ref: '#/definitions/performanceEntity' },
-      { $ref: '#/definitions/personEntity' },
-      { $ref: '#/definitions/eventEntity' }],
+      { $ref: '#/definitions/performanceEntity' }
+    ],
     properties: {
       type: {
         type: 'string',
@@ -17,12 +16,26 @@ module.exports = {
       },
       title: {
         'type': 'string',
-        'description': "The person's last name.",
-        'x-itemClass': 'md3 xs12'
+        'title': 'Performance Title',
+        'x-itemClass': 'md7 xs12'
       },
       event: {
         type: 'array',
-        title: 'Event',
+        title: null,
+        format: 'group',
+        items: {
+          $ref: '#/definitions/eventEntity'
+        }
+      },
+      persons: {
+        type: 'array',
+        title: 'Persons',
+        description: 'A list of vegetables as editable objects.',
+        items: { '$ref': '#/definitions/personEntity' }
+      },
+      work: {
+        type: 'array',
+        title: null,
         format: 'group',
         items: {
           $ref: '#/definitions/eventEntity'
@@ -32,53 +45,106 @@ module.exports = {
     definitions: {
       eventEntity: {
         title: 'Event Details',
-        description: "dshjfljsdhlfjhsdlkfhjlsdjf",
+        description: 'Lorem ipsum ...',
         type: 'object',
         format: 'inline',
         properties: {
           organiser: {
             type: 'string',
-            description: 'sdfgsdfhsdfhjgkjdfhgkjh',
-            'x-itemClass': 'md6 lg3 xs12'
+            title: 'Organizer',
+            'x-icon': 'account_balance',
+            'x-itemClass': 'xs12 md7'
+          },
+          year: {
+            'x-itemClass': 'xs12 md5',
+            title: 'Year',
+            type: 'string',
+            format: 'year'
           },
           location: {
+            title: 'Venue',
             type: 'string',
-            'x-itemClass': 'md6 lg3 xs12',
-          },
-          date_start: {
-            'x-itemClass': 'xs6',
-            type: 'string',
-            format: 'date'
-          },
-          date_end: {
-            'x-itemClass': 'xs6',
-            type: 'string',
-            format: 'date'
+            description: 'Where is this Event?',
+            'x-itemClass': 'xs12 md7'
           }
         }
       },
-      'veggie': {
-        'type': 'object',
-        'required': [ 'veggieName', 'veggieLike' ],
+      personEntity: {
+        type: 'object',
+        title: 'Person Details',
+        format: 'inline',
+        'required': [ 'lastName', 'email', 'fromEnum' ],
         'properties': {
-          'veggieName': {
+          'firstName': {
             'type': 'string',
-            'description': 'The name of the vegetable.'
+            'x-itemClass': 'xs12 md6'
           },
-          'veggieLike': {
-            'type': 'boolean',
-            'description': 'Do I like this vegetable?'
+          'lastName': {
+            'type': 'string',
+            'x-itemClass': 'xs12 md6'
+          },
+          'email': {
+            'type': 'string',
+            'x-itemClass': 'xs12 md6'
+          },
+          'email2': {
+            'type': 'string',
+            'x-itemClass': 'xs12 md6'
+          },
+          fromOneOf: {
+            title: 'Role',
+            type: 'string',
+            'x-itemClass': 'xs12 md6',
+            description: 'Select the Role of the Person',
+            oneOf: [
+              {
+                const: 'artist',
+                title: 'Artist'
+              },
+              {
+                const: 'involved',
+                title: 'Performer Involved'
+              },
+              {
+                const: 'docu',
+                title: 'Documentalist'
+              },
+              {
+                const: 'feedback',
+                title: 'Feedback'
+              },
+              {
+                const: 'mentor',
+                title: 'Feedback'
+              },
+              {
+                const: 'group_mentor',
+                title: 'Group Mentor'
+              }
+            ]
+          },
+          website: {
+            'type': 'string',
+            'x-itemClass': 'xs12 md6'
           }
         }
       },
       performanceEntity: {
-        title: 'Main infos',
+        title: 'Work',
+        description: 'Details and meta data about this Work.',
         properties: {
-          address: {
+          description: {
+            title: 'Idea/Description',
             type: 'string',
             maxLength: 2000
           },
-          'credit_card': { 'type': 'number' }
+          tags: {
+            type: 'array',
+            description: 'This is a simple array of strings',
+            items: {
+              type: 'string'
+            }
+          }
         },
         'dependencies': {
           'credit_card': {
@@ -86,17 +152,6 @@ module.exports = {
               'billing_address': { 'type': 'string' }
             },
             'required': ['billing_address']
-          }
-        }
-      },
-      personEntity: {
-        title: 'Social media',
-        properties: {
-          twitter: {
-            type: 'string'
-          },
-          facebook: {
-            type: 'string'
           }
         }
       }
@@ -109,15 +164,6 @@ module.exports = {
     firstName: 'Alban',
     lastName: 'Mouton',
     event: [{}],
-    'vegetables': [
-      {
-        'veggieName': 'potato',
-        'veggieLike': true
-      },
-      {
-        'veggieName': 'broccoli',
-        'veggieLike': false
-      }
-    ],
+    persons: [{}]
   }
 }
