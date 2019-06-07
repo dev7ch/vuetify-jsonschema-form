@@ -3,8 +3,8 @@
   <v-flex v-if="fullSchema && fullSchema.const === undefined && fullSchema['x-display'] !== 'hidden'"
           class="vjsf-property"
           :id="fullSchema['x-id'] ? fullSchema['x-id'] : null"
-          :class="fullSchema['x-class'] ? fullSchema['x-class'] : null"
-          :style="fullSchema['x-style'] ? fullSchema['x-style'] : null"
+          :class="fullSchema['x-itemClass'] ? fullSchema['x-itemClass'] : null"
+          :style="fullSchema['x-itemStyle'] ? fullSchema['x-itemStyle'] : null"
   >
     <!-- Date picker -->
     <v-menu v-if="fullSchema.type === 'string' && ['date', 'date-time'].includes(fullSchema.format)" ref="menu"
@@ -400,7 +400,8 @@
 
     <!-- Object sub container with properties that may include a select based on a oneOf and subparts base on a allOf -->
     <div v-else-if="fullSchema.type === 'object'">
-      <v-subheader v-if="fullSchema.title" :style="foldable ? 'cursor:pointer;' :'' " class="mt-2"
+      <v-subheader v-if="fullSchema.title && fullSchema.format !== 'inline'" :style="foldable ? 'cursor:pointer;' :'' "
+                   class="mt-2"
                    @click="folded = !folded">
         {{ fullSchema.title }}
         &nbsp;
@@ -411,7 +412,14 @@
           arrow_drop_up
         </v-icon>
       </v-subheader>
-
+      <template v-else>
+        <v-subheader>
+          {{ fullSchema.title }}
+        </v-subheader>
+        <p v-if="fullSchema.description">
+          {{ fullSchema.description }}
+        </p>
+      </template>
       <v-slide-y-transition>
         <div v-show="!foldable || !folded" v-if="fullSchema.format !== 'inline'">
           <p v-if="fullSchema.description">
@@ -513,7 +521,7 @@
             </template>
           </template>
         </div>
-        <v-layout v-else-if="fullSchema.format === 'inline'"  wrap
+        <v-layout v-else-if="fullSchema.format === 'inline'" wrap
                   justify-space-between>
           <property v-for="childProp in fullSchema.properties" :key="childProp.key"
                     :schema="childProp"
@@ -618,18 +626,19 @@
     <v-row v-else-if="fullSchema.type === 'array' && fullSchema.format === 'group'">
       <v-form v-if="modelWrapper[modelKey] && modelWrapper[modelKey].length" grid-list-md class="form-group">
         <v-subheader>{{ label }}</v-subheader>
-          <div v-for="(itemModel, i) in modelWrapper[modelKey]" :key="i" class="form-group--inner">
-            <property :schema="fullSchema.items"
-                      :model-wrapper="modelWrapper[modelKey]"
-                      :model-root="modelRoot"
-                      :model-key="i"
-                      :parent-key="`${fullKey}.`"
-                      :options="options"
-                      @error="e => $emit('error', e)"
-                      @change="e => $emit('change', e)"
-                      @input="e => $emit('input', e)"
-            />
-          </div>
+        <div v-for="(itemModel, i) in modelWrapper[modelKey]" :key="i" class="form-group--inner">
+          <property :schema="fullSchema.items"
+                    :model-wrapper="modelWrapper[modelKey]"
+                    :model-root="modelRoot"
+                    :model-key="i"
+                    :parent-key="`${fullKey}.`"
+                    :options="options"
+                    @error="e => $emit('error', e)"
+                    @change="e => $emit('change', e)"
+                    @input="e => $emit('input', e)"
+                    class="pa-0"
+          />
+        </div>
         <v-layout row class="mt-2 mb-1 pr-1">
           <v-spacer/>
           <v-tooltip v-if="fullSchema.description" left>
@@ -982,6 +991,11 @@
 
   .vjsf-property .color-picker-trigger-empty {
     background: linear-gradient(to top right, transparent 0, transparent calc(50% - 2.4px), #de080a 50%, transparent calc(50% + 2.4px), transparent);
+  }
+
+  .v-subheader {
+    font-size: 120%;
+    padding-left: 0;
   }
 
 </style>
