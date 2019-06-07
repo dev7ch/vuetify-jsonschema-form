@@ -476,8 +476,8 @@
           />
 
           <!-- Sub containers for allOfs -->
-          <template v-if="fullSchema.allOf && fullSchema.allOf.length">
-            <template v-if="!parentKey && fullSchema.allOf[0].title">
+          <template v-if="fullSchema.allOf && fullSchema.allOf.length || fullSchema.format === 'expansion' ">
+            <template v-if="!parentKey && fullSchema.allOf[0].title || fullSchema.title && fullSchema.format === 'expansion'">
               <!-- Accordion / expansion panets at root level -->
               <v-expansion-panel :inset="options.accordionMode === 'inset'" :popout="options.accordionMode === 'popout'"
                                  focusable

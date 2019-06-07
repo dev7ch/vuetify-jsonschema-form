@@ -6,9 +6,6 @@ module.exports = {
     title: 'ACT',
     description: 'Schema template example for <a href="https://ba14ns21403.fhnw.ch/mediaserver/app/upload/act.php">this From</a>',
     type: 'object',
-    allOf: [
-      { $ref: '#/definitions/performanceEntity' }
-    ],
     properties: {
       type: {
         type: 'string',
@@ -34,12 +31,13 @@ module.exports = {
         items: { '$ref': '#/definitions/personEntity' }
       },
       work: {
-        type: 'array',
-        title: null,
-        format: 'group',
-        items: {
-          $ref: '#/definitions/eventEntity'
-        }
+        type: 'object',
+        title: 'About the Work',
+        format: 'expansion',
+        allOf: [
+          { $ref: '#/definitions/performanceEntity' },
+          { $ref: '#/definitions/personEntity' }
+        ]
       }
     },
     definitions: {
@@ -144,6 +142,16 @@ module.exports = {
             items: {
               type: 'string'
             }
+          },
+          duration: {
+            type: 'string',
+            description: 'This is a simple array of strings'
+          },
+          space: {
+            title: 'Space',
+            description: 'setting/stage design/public sphere/agile etc.',
+            type: 'string',
+            maxLength: 2000
           }
         },
         'dependencies': {
