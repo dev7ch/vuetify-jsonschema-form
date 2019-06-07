@@ -1,4 +1,6 @@
 module.exports = [
+  require('./hgk-act'),
+  require('./hgk-media'),
   require('./basic'),
   require('./arrays'),
   require('./pickers'),

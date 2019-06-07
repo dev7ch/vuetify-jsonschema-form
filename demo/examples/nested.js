@@ -7,10 +7,9 @@ module.exports = {
     description: 'A few metadata about some person in a nested object structure.',
     'type': 'object',
     required: ['name'],
-    'properties': {
+    properties: {
       type: {
-        type: 'string',
-        const: 'person'
+        type: 'string'
       },
       name: {
         type: 'object',

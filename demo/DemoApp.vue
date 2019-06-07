@@ -46,6 +46,8 @@
             </h2>
 
             <v-form ref="myForm" v-model="formValid">
+              <v-container>
+                <v-layout align-center justify-space-between row>
               <v-jsonschema-form
                 v-if="schema"
                 :schema="schema"
@@ -55,6 +57,8 @@
                 @change="change"
                 @input="input"
               />
+              </v-layout>
+              </v-container>
             </v-form>
             <h2 class="title my-4">
               Data:
