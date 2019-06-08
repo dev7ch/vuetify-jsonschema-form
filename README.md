@@ -78,8 +78,8 @@ I you don't use a build tool, and want to load the library through script tags, 
 
 ```html
 ...
-<script src="https://cdn.jsdelivr.net/npm/@dev7ch/vuetify-jsonschema-form@0.26/dist/main.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@dev7ch/vuetify-jsonschema-form@0.26/dist/main.js" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@dev7ch/vuetify-jsonschema-form@latest/dist/main.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@dev7ch/vuetify-jsonschema-form@latest/dist/main.css" rel="stylesheet">
 ...
 <script>
   ...
