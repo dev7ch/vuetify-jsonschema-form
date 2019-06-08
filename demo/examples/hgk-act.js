@@ -36,9 +36,17 @@ module.exports = {
         format: 'expansion',
         allOf: [
           { $ref: '#/definitions/performanceEntity' },
-          { $ref: '#/definitions/personEntity' }
+          { $ref: '#/definitions/mediaEntity' }
         ]
       }
+      // media: {
+      //   type: 'object',
+      //   title: 'Images and Media',
+      //   format: 'expansion',
+      //   allOf: [
+      //     { $ref: '#/definitions/mediaEntity' }
+      //   ]
+      // }
     },
     definitions: {
       eventEntity: {
@@ -71,8 +79,8 @@ module.exports = {
         type: 'object',
         title: 'Person Details',
         format: 'inline',
-        'required': [ 'lastName', 'email', 'fromEnum' ],
-        'properties': {
+        required: [ 'lastName', 'email', 'role' ],
+        properties: {
           'firstName': {
             'type': 'string',
             'x-itemClass': 'xs12 md6'
@@ -89,7 +97,7 @@ module.exports = {
             'type': 'string',
             'x-itemClass': 'xs12 md6'
           },
-          fromOneOf: {
+          role: {
             title: 'Role',
             type: 'string',
             'x-itemClass': 'xs12 md6',
@@ -129,6 +137,7 @@ module.exports = {
       },
       performanceEntity: {
         title: 'Work',
+        format: 'inline',
         description: 'Details and meta data about this Work.',
         properties: {
           description: {
@@ -145,13 +154,36 @@ module.exports = {
           },
           duration: {
             type: 'string',
-            description: 'This is a simple array of strings'
+            description: 'This is a simple array of strings',
+            'x-itemClass': 'xs12'
           },
           space: {
             title: 'Space',
             description: 'setting/stage design/public sphere/agile etc.',
             type: 'string',
-            maxLength: 2000
+            maxLength: 2000,
+            'x-itemClass': 'xs12'
+          },
+          technics: {
+            title: 'Technics (what you bring / what you need)',
+            description: 'i will bring / i need',
+            type: 'string',
+            maxLength: 2000,
+            'x-itemClass': 'xs12'
+          },
+          university: {
+            title: 'University',
+            description: 'i will bring / i need',
+            type: 'string',
+            maxLength: 300,
+            'x-itemClass': 'xs12 md6'
+          },
+          institute: {
+            title: 'Institute',
+            description: 'i will bring / i need',
+            type: 'string',
+            maxLength: 300,
+            'x-itemClass': 'xs12 md6'
           }
         },
         'dependencies': {
@@ -161,6 +193,96 @@ module.exports = {
             },
             'required': ['billing_address']
           }
+        }
+      },
+      mediaEntity: {
+        type: 'object',
+        title: 'Images and Media',
+        format: 'inline',
+        properties: {
+          media: {
+            title: 'Media',
+            description: 'i will bring / i need',
+            type: 'array',
+            'x-itemClass': 'xs12 md6',
+            items: [
+              { $ref: '#/definitions/imageEntity' }
+            ]
+          },
+          upload: {
+            type: 'object',
+            format: 'upload',
+            properties: {
+              media: {
+                type: 'string',
+                title: 'Image Meta Data',
+                $ref: '#/definitions/imageEntity'
+
+              }
+            }
+          },
+        }
+      },
+      imageEntity: {
+        type: 'object',
+        format: 'inline',
+        required: ['license', 'access'],
+        properties: {
+          owner: {
+            title: 'Rightholder',
+            type: 'string'
+          },
+          license: {
+            title: 'License',
+            type: 'string'
+          },
+          reference: {
+            title: 'Web Reference',
+            type: 'string',
+            placeholder: 'https:// ...'
+          },
+          embargo_start: {
+            title: 'Embargo Start',
+            type: 'string',
+            format: 'date',
+            'x-itemClass': 'xs12 md6'
+          },
+          embargo_end: {
+            title: 'Embargo End',
+            type: 'string',
+            format: 'date',
+            'x-itemClass': 'xs12 md6'
+          },
+          access: {
+            title: 'Access',
+            type: 'string',
+            description: 'Select the access',
+            oneOf: [
+              {
+                const: 'public',
+                title: 'Internet'
+              },
+              {
+                const: 'internal',
+                title: 'FHNW'
+              },
+              {
+                const: 'resricted',
+                title: 'Restricted'
+              }
+            ]
+          },
+          legend: {
+            title: 'Legend Reference',
+            type: 'string'
+          }
+          // upload: {
+          //   type: 'array',
+          //   items: {
+          //     type: 'object',
+          //     enum: []
+          //   }
+          // }
         }
       }
     }
@@ -172,6 +294,7 @@ module.exports = {
     firstName: 'Alban',
     lastName: 'Mouton',
     event: [{}],
-    persons: [{}]
+    persons: [{}],
+    upload: []
   }
 }

@@ -441,7 +441,7 @@
     </v-combobox>
 
     <!-- Object sub container with properties that may include a select based on a oneOf and subparts base on a allOf -->
-    <div v-else-if="fullSchema.type === 'object'">
+    <div v-else-if="fullSchema.type === 'object' && fullSchema.format !== 'upload'">
       <v-subheader v-if="fullSchema.title && fullSchema.format !== 'inline'" :style="foldable ? 'cursor:pointer;' :'' "
                    class="mt-2"
                    @click="folded = !folded"
@@ -461,7 +461,7 @@
       </template>
       <v-slide-y-transition>
         <div v-show="!foldable || !folded" v-if="fullSchema.format !== 'inline'">
-<!--          <p v-if="fullSchema.description" v-html="fullSchema.description" />-->
+          <!--          <p v-if="fullSchema.description" v-html="fullSchema.description" />-->
           <property v-for="childProp in fullSchema.properties" :key="childProp.key"
                     :schema="childProp"
                     :model-wrapper="modelWrapper[modelKey]"
@@ -483,7 +483,7 @@
                                  focusable
                                  :value="fullSchema.allOf.length > 0 ? 0 : null"
               >
-                <v-expansion-panel-content v-for="(currentAllOf, i) in fullSchema.allOf"  :key="i">
+                <v-expansion-panel-content v-for="(currentAllOf, i) in fullSchema.allOf" :key="i">
                   <span slot="header" style="font-weight:bold">{{ currentAllOf.title }}</span>
                   <v-card>
                     <v-card-text>
@@ -564,6 +564,7 @@
                   justify-space-between
         >
           <property v-for="childProp in fullSchema.properties" :key="childProp.key"
+                    class="xs12"
                     :schema="childProp"
                     :model-wrapper="modelWrapper[modelKey]"
                     :model-root="modelRoot"
@@ -578,6 +579,50 @@
         </v-layout>
       </v-slide-y-transition>
     </div>
+
+    <template v-else-if="fullSchema.type === 'object' && fullSchema.format === 'upload'">
+<!--      {{ modelWrapper[modelKey] }}-->
+<!--      {{ modelWrapper }}-->
+
+      <file-pond
+          name="test"
+          ref="pond"
+          label-idle="Drop files here..."
+          allow-multiple="true"
+          accepted-file-types="image/jpeg, image/png"
+          :server="fakeServer"
+          @files="files"
+          @init="handleFilePondInit"
+          @error="handleFileError"
+          @addfile="modelWrapper[modelKey].files = files"
+      />
+      <template v-if="files.length > 0">
+
+
+
+                  <div v-for="(itemModel, i) in files" :key="i" class="form-group--inner" @change="modelWrapper[modelKey].files.push(JSON.parse(readFile(itemModel)))">
+                    <span style="display:none;">
+                      {{ modelWrapper[modelKey].files.push({
+                      name: itemModel.filename,
+                      file: JSON.parse(readFile(itemModel))
+                    }) }}
+                    </span>
+                    {{ itemModel.filename }}
+                    {{ itemModel.getMetadata() }}
+                    <property :schema="fullSchema.properties[0]"
+                              :model-wrapper="modelWrapper[modelKey]"
+                              :model-root="modelRoot"
+                              :model-key="i"
+                              :parent-key="`${fullKey}.`"
+                              :options="options"
+                              class="pa-0"
+                              @error="e => $emit('error', e)"
+                              @change="e => $emit('change', e)"
+                              @input="e => $emit('input', e)"
+                    />
+                  </div>
+      </template>
+    </template>
 
     <!-- Tuples array sub container -->
     <div v-else-if="fullSchema.type === 'array' && Array.isArray(fullSchema.items)">
@@ -612,7 +657,36 @@
     </div>
 
     <!-- Dynamic size array of complex types sub container -->
-    <div v-else-if="fullSchema.type === 'array' && fullSchema.format !== 'group'">
+    <template v-else-if="fullSchema.type === 'array' && fullSchema.format === 'group'">
+      <v-form v-if="modelWrapper[modelKey] && modelWrapper[modelKey].length" grid-list-md class="form-group">
+        <v-subheader v-if="fullSchema.title">
+          {{ label }}
+        </v-subheader>
+        <div v-for="(itemModel, i) in modelWrapper[modelKey]" :key="i" class="form-group--inner">
+          <property :schema="fullSchema.items"
+                    :model-wrapper="modelWrapper[modelKey]"
+                    :model-root="modelRoot"
+                    :model-key="i"
+                    :parent-key="`${fullKey}.`"
+                    :options="options"
+                    class="pa-0"
+                    @error="e => $emit('error', e)"
+                    @change="e => $emit('change', e)"
+                    @input="e => $emit('input', e)"
+          />
+        </div>
+        <v-layout row class="mt-2 mb-1 pr-1">
+          <v-spacer />
+          <v-tooltip v-if="fullSchema.description" left>
+            <v-icon slot="activator">
+              info
+            </v-icon>
+            <div class="vjsf-tooltip" v-html="htmlDescription" />
+          </v-tooltip>
+        </v-layout>
+      </v-form>
+    </template>
+    <div v-else-if="fullSchema.type === 'array' && fullSchema.format !== 'group' ">
       <v-container v-if="modelWrapper[modelKey] && modelWrapper[modelKey].length" grid-list-md class="pt-0 px-0">
         <v-subheader>{{ label }}</v-subheader>
         <v-layout row wrap>
@@ -663,83 +737,11 @@
         </v-layout>
       </v-container>
     </div>
-    <!-- Dynamic size array of complex types sub container -->
-    <template v-else-if="fullSchema.type === 'array' && fullSchema.format === 'group'">
-      <v-form v-if="modelWrapper[modelKey] && modelWrapper[modelKey].length" grid-list-md class="form-group">
-        <v-subheader v-if="fullSchema.title">
-          {{ label }}
-        </v-subheader>
-        <div v-for="(itemModel, i) in modelWrapper[modelKey]" :key="i" class="form-group--inner">
-          <property :schema="fullSchema.items"
-                    :model-wrapper="modelWrapper[modelKey]"
-                    :model-root="modelRoot"
-                    :model-key="i"
-                    :parent-key="`${fullKey}.`"
-                    :options="options"
-                    class="pa-0"
-                    @error="e => $emit('error', e)"
-                    @change="e => $emit('change', e)"
-                    @input="e => $emit('input', e)"
-          />
-        </div>
-        <v-layout row class="mt-2 mb-1 pr-1">
-          <v-spacer />
-          <v-tooltip v-if="fullSchema.description" left>
-            <v-icon slot="activator">
-              info
-            </v-icon>
-            <div class="vjsf-tooltip" v-html="htmlDescription" />
-          </v-tooltip>
-        </v-layout>
-      </v-form>
-    </template>
-
-    <v-autocomplete v-else-if="fullSchema.type === 'array' && fullSchema.format === 'autocomplete'"
-                    v-model="modelWrapper[modelKey]"
-                    :items="selectItems"
-                    :search-input.sync="q"
-                    :name="fullKey"
-                    :label="label"
-                    :no-data-text="options.noDataMessage"
-                    :disabled="disabled"
-                    :required="required"
-                    :rules="rules"
-                    :item-text="itemTitle"
-                    :item-value="itemKey"
-                    :return-object="(fullSchema.type === 'array' && fullSchema.items.type === 'object') || fullSchema.type === 'object'"
-                    :clearable="!required"
-                    :filter="() => true"
-                    :placeholder="options.searchMessage"
-                    :loading="loading"
-                    :multiple="fullSchema.type === 'array'"
-                    @change="change"
-                    @input="input"
-    >
-      <template slot="selection" slot-scope="data">
-        <select-icon v-if="itemIcon" :value="data.item[itemIcon]" />
-        <div v-if="![null, undefined].includes(data.item[itemTitle])">
-          {{ data.item[itemTitle] + (fullSchema.type === 'array' && data.index !== modelWrapper[modelKey].length - 1 ?
-            ',&nbsp;' : '') }}
-        </div>
-      </template>
-      <template slot="item" slot-scope="data">
-        <select-icon v-if="itemIcon" :value="data.item[itemIcon]" />
-        <v-list-tile-content>
-          <v-list-tile-title>{{ data.item[itemTitle] }}</v-list-tile-title>
-        </v-list-tile-content>
-      </template>
-
-      <v-tooltip v-if="fullSchema.description" slot="append-outer" left>
-        <v-icon slot="activator">
-          info
-        </v-icon>
-        <div class="vjsf-tooltip" v-html="htmlDescription" />
-      </v-tooltip>
-    </v-autocomplete>
 
     <p v-else-if="options.debug">
       Unsupported type "{{ fullSchema.type }}" - {{ fullSchema }}
     </p>
+
   </v-flex>
 </template>
 
@@ -758,6 +760,7 @@ export default {
   data() {
     return {
       helperModel: null,
+      files: [],
       ready: false,
       menu: false,
       rawSelectItems: null,
@@ -769,7 +772,28 @@ export default {
       loading: false,
       folded: true,
       showColorPicker: false,
-      subModels: {} // a container for objects from root oneOfs and allOfs
+      subModels: {}, // a container for objects from root oneOfs and allOfs
+      fakeServer: {
+        process: (fieldName, file, metadata, load) => {
+          // simulates uploading a file
+          console.log(fieldName)
+          console.log(file)
+          setTimeout(() => {
+            load(Date.now())
+            if (file) {
+              let files = this.$refs.pond.getFiles()
+              this.files = [...files]
+              // console.log(files)
+              // console.log(this.files)
+            }
+          })
+        },
+        load: (source, load) => {
+          // simulates loading a file from the server
+          fetch(source).then(res => res.blob()).then(load)
+          console.log(source.filename)
+        }
+      },
     }
   },
   computed: {
@@ -841,6 +865,14 @@ export default {
         )
       }
     },
+
+    uploads: {
+      handler() {
+        this.$nextTick(
+          () => (console.log(this.uploads))
+        )
+      }
+    },
     q() {
       // This line prevents reloading the list just after selecting an item in an auto-complete
       if (this.modelWrapper[this.modelKey] && this.modelWrapper[this.modelKey][this.itemTitle] === this.q) return
@@ -884,6 +916,71 @@ export default {
     }
   },
   methods: {
+    readFile(file) {
+      console.log(file)
+      let newFiles = []
+
+      // if (file.length) {
+      //   for (let i = 0; i < file.length; i++) {
+      //     newFiles.push(
+      //       {
+      //         'lastModified'     : file[i].lastModified,
+      //         'lastModifiedDate' : file[i].lastModifiedDate,
+      //         'name'             : file[i].name,
+      //         'size'             : file[i].size,
+      //         'type'             : file[i].type
+      //       }
+      //     )
+      //   }
+      //   return newFiles
+      // } else {
+        let newFile = {
+          'lastModified'     : file.source.lastModified,
+          'lastModifiedDate' : file.source.lastModifiedDate,
+          'name'             : file.source.name,
+          'size'             : file.source.size,
+          'type'             : file.source.type
+        }
+        return JSON.stringify(newFile)
+
+    },
+    handleFilePondInit: function() {
+      if (this.fullSchema.format === 'upload') {
+        console.log('FilePond has initialized')
+      }
+      // FilePond instance methods are available on `this.$refs.pond`
+    },
+    handleFileError: function() {
+      if (this.fullSchema.format === 'upload') {
+        console.log('UPPPP')
+      }
+      console.log('FilePond ERROR')
+
+      // FilePond instance methods are available on `this.$refs.pond`
+    },
+    handleFileAdd: function() {
+      if (this.fullSchema.format === 'upload') {
+        console.log('FilePond has added files')
+        this.input()
+      }
+      // FilePond instance methods are available on `this.$refs.pond`
+    },
+    handleFileProccess: function() {
+      if (this.fullSchema.format === 'upload') {
+        console.log('UPPPP')
+      }
+      console.log('FilePond has initialized')
+
+      // FilePond instance methods are available on `this.$refs.pond`
+    },
+    handleFileProgress: function() {
+      if (this.fullSchema.format === 'upload') {
+        console.log('Progress')
+      }
+      console.log('FilePond has initialized')
+
+      // FilePond instance methods are available on `this.$refs.pond`
+    },
     updateSelectItems() {
       const selectItems = selectUtils.getSelectItems(this.rawSelectItems, this.fullSchema, this.modelWrapper, this.modelKey, this.itemKey)
       if (this.fullSchema['x-display'] === 'list') {
