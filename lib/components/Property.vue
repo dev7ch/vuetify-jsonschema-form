@@ -623,7 +623,7 @@
     </template>
 
     <!-- Tuples array sub container -->
-    <div v-else-if="fullSchema.type === 'array' && Array.isArray(fullSchema.items)">
+    <div v-else-if="fullSchema.type === 'array' && Array.isArray(fullSchema.items) && fullSchema.format!== 'multiple'">
       <v-subheader v-if="fullSchema.title" :style="foldable ? 'cursor:pointer;' :'' " class="mt-2"
                    @click="folded = !folded"
       >
@@ -684,7 +684,7 @@
         </v-layout>
       </v-form>
     </template>
-    <div v-else-if="fullSchema.type === 'array' && fullSchema.format !== 'group' ">
+    <div v-else-if="fullSchema.type === 'array' && fullSchema.format === 'multiple' ">
       <v-container v-if="modelWrapper[modelKey] && modelWrapper[modelKey].length" grid-list-md class="pt-0 px-0">
         <v-subheader>{{ label }}</v-subheader>
         <v-layout row wrap>
@@ -704,25 +704,23 @@
                   </v-btn>
                 </v-card-title>
                 <v-card-text>
-                  <property :schema="fullSchema.items"
-                            :model-wrapper="modelWrapper[modelKey]"
-                            :model-root="modelRoot"
-                            :model-key="i"
-                            :parent-key="`${fullKey}.`"
-                            :options="options"
-                            @error="e => $emit('error', e)"
-                            @change="e => $emit('change', e)"
-                            @input="e => $emit('input', e)"
-                  />
+                  <template v-for="(item, idx) in fullSchema.items">
+                    <property :key="idx"
+                              :schema="item"
+                              :model-wrapper="modelWrapper[modelKey]"
+                              :model-root="modelRoot"
+                              :model-key="i"
+                              :parent-key="`${fullKey}.`"
+                              :options="options"
+                    />
+                  </template>
                 </v-card-text>
               </v-card>
             </v-flex>
           </draggable>
         </v-layout>
         <v-layout row class="mt-2 mb-1 pr-1">
-          <v-btn v-if="!disabled && !(fromUrl || fullSchema.fromData)" icon color="primary"
-                 @click="modelWrapper[modelKey].push(fullSchema.items.default || defaultValue(fullSchema.items)); change(); input()"
-          >
+          <v-btn color="teal lighten-3" v-if="fullSchema.format === 'multiple'" @click="modelWrapper[modelKey].push(modelWrapper[modelKey][0][0])" primary>
             <v-icon>add</v-icon>
           </v-btn>
           <v-spacer />
