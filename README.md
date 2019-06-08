@@ -2,12 +2,12 @@
 
 Generate forms for the [vuetify](https://vuetifyjs.com/en/) UI library (vuejs) based on annotated JSON schemas.
 
-For a view of all the functionalities check the [demo](https://koumoul-dev.github.io/vuetify-jsonschema-form/latest/).
+See the [Demo and Templatebuilder](https://digma-form-builder.netlify.com/).
 
 ## Installation
 
 ```bash
-npm i --save @koumoul/vuetify-jsonschema-form
+npm i --save @dev7ch/vuetify-jsonschema-form
 ```
 
 ## Usage
@@ -28,8 +28,8 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Swatches from 'vue-swatches'
 import 'vue-swatches/dist/vue-swatches.min.css'
-import VJsonschemaForm from '@koumoul/vuetify-jsonschema-form'
-import '@koumoul/vuetify-jsonschema-form/dist/main.css'
+import VJsonschemaForm from '@dev7ch/vuetify-jsonschema-form'
+import '@dev7ch/vuetify-jsonschema-form/dist/main.css'
 import { Sketch } from 'vue-color'
 
 Vue.use(Vuetify)
@@ -71,15 +71,15 @@ export default {
 The library can also be loaded from source if you use [Vuetify "à la carte"](https://vuetifyjs.com/en/framework/a-la-carte). In this case you will have to instruct your build tool to transpile the source with babel.
 
 ```js
-import VJsonschemaForm from '@koumoul/vuetify-jsonschema-form/lib/index.vue'
+import VJsonschemaForm from '@dev7ch/vuetify-jsonschema-form/lib/index.vue'
 ```
 
 I you don't use a build tool, and want to load the library through script tags, you can do something like this.
 
 ```html
 ...
-<script src="https://cdn.jsdelivr.net/npm/@koumoul/vuetify-jsonschema-form@0.26/dist/main.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/@koumoul/vuetify-jsonschema-form@0.26/dist/main.js" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@dev7ch/vuetify-jsonschema-form@0.26/dist/main.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@dev7ch/vuetify-jsonschema-form@0.26/dist/main.js" rel="stylesheet">
 ...
 <script>
   ...
