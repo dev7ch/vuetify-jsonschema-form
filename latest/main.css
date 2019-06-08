@@ -20,7 +20,11 @@
   border: 2px solid #ccc;
 }
 .vjsf-property .color-picker-trigger-empty {
-  background: linear-gradient(to top right,transparent 0,transparent calc(50% - 2.4px),#de080a 50%,transparent calc(50% + 2.4px),transparent);
+  background: linear-gradient(to top right, transparent 0, transparent calc(50% - 2.4px), #de080a 50%, transparent calc(50% + 2.4px), transparent);
+}
+.v-subheader {
+  font-size: 120%;
+  padding-left: 0;
 }
 
 
