@@ -1,7 +1,7 @@
 module.exports = {
   title: 'HGK ACT Submission Form',
   schema: {
-    '$id': 'https://example.com/person.schema.json', // Path to defined Schemo or api response
+    '$id': 'https://mediathek.hgk.fhnw.ch/act.schema.json', // Path to defined Schemo or api response
     '$schema': 'http://json-schema.org/draft-07/schema#',
     title: 'ACT',
     description: 'Schema template example for <a href="https://ba14ns21403.fhnw.ch/mediaserver/app/upload/act.php">this From</a>',
@@ -39,14 +39,6 @@ module.exports = {
           { $ref: '#/definitions/mediaEntity' }
         ]
       }
-      // media: {
-      //   type: 'object',
-      //   title: 'Images and Media',
-      //   format: 'expansion',
-      //   allOf: [
-      //     { $ref: '#/definitions/mediaEntity' }
-      //   ]
-      // }
     },
     definitions: {
       eventEntity: {
@@ -198,13 +190,11 @@ module.exports = {
       mediaEntity: {
         type: 'object',
         title: 'Images and Media',
+        description: 'Upload images and edit media properties. <br /> Define a prefilling Template and adjust Meta Data after upload.',
         format: 'inline',
         properties: {
-          media: {
-            title: 'Media',
-            description: 'i will bring / i need',
+          template: {
             type: 'array',
-            'x-itemClass': 'xs12 md6',
             items: [
               { $ref: '#/definitions/imageEntity' }
             ]
@@ -213,20 +203,21 @@ module.exports = {
             type: 'object',
             format: 'upload',
             properties: {
-              media: {
-                type: 'string',
-                title: 'Image Meta Data',
-                $ref: '#/definitions/imageEntity'
-
+              meta: {
+                type: 'array',
+                items: [
+                  { $ref: '#/definitions/imageEntity' }
+                ]
               }
             }
-          },
+          }
         }
       },
       imageEntity: {
         type: 'object',
         format: 'inline',
         required: ['license', 'access'],
+        title: 'Image Meta Data',
         properties: {
           owner: {
             title: 'Rightholder',

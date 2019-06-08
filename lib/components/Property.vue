@@ -581,46 +581,44 @@
     </div>
 
     <template v-else-if="fullSchema.type === 'object' && fullSchema.format === 'upload'">
-<!--      {{ modelWrapper[modelKey] }}-->
-<!--      {{ modelWrapper }}-->
+      <v-subheader v-if="fullSchema.title" v-html="fullSchema.title" />
+      <p v-if="fullSchema.description" v-html="fullSchema.description" />
 
       <file-pond
-          name="test"
-          ref="pond"
-          label-idle="Drop files here..."
-          allow-multiple="true"
-          accepted-file-types="image/jpeg, image/png"
-          :server="fakeServer"
-          @files="files"
-          @init="handleFilePondInit"
-          @error="handleFileError"
-          @addfile="modelWrapper[modelKey].files = files"
+        ref="pond"
+        name="test"
+        label-idle="Drop files here or click to browse ..."
+        allow-multiple="true"
+        accepted-file-types="image/jpeg, image/png"
+        :server="fakeServer"
+        @files="files"
+        @init="handleFilePondInit"
+        @error="handleFileError"
+        @addfile="modelWrapper[modelKey].files = files, handleFileAdd()"
       />
       <template v-if="files.length > 0">
-
-
-
-                  <div v-for="(itemModel, i) in files" :key="i" class="form-group--inner" @change="modelWrapper[modelKey].files.push(JSON.parse(readFile(itemModel)))">
-                    <span style="display:none;">
-                      {{ modelWrapper[modelKey].files.push({
-                      name: itemModel.filename,
-                      file: JSON.parse(readFile(itemModel))
-                    }) }}
-                    </span>
-                    {{ itemModel.filename }}
-                    {{ itemModel.getMetadata() }}
-                    <property :schema="fullSchema.properties[0]"
-                              :model-wrapper="modelWrapper[modelKey]"
-                              :model-root="modelRoot"
-                              :model-key="i"
-                              :parent-key="`${fullKey}.`"
-                              :options="options"
-                              class="pa-0"
-                              @error="e => $emit('error', e)"
-                              @change="e => $emit('change', e)"
-                              @input="e => $emit('input', e)"
-                    />
-                  </div>
+        <div v-for="(itemModel, i) in files" :key="i" class="form-group--inner">
+          <span style="display:none;">
+            {{ modelWrapper[modelKey].files[i] = {
+              name: itemModel.filename,
+              file: JSON.parse(readFile(itemModel)),
+              meta: modelWrapper[modelKey][i]
+            } }}
+          </span>
+          {{ itemModel.filename }}
+          <!--{{ itemModel.getMetadata() }}-->
+          <property :schema="fullSchema.properties[0]"
+                    :model-wrapper="modelWrapper[modelKey]"
+                    :model-root="modelRoot"
+                    :model-key="i"
+                    :parent-key="`${fullKey}.`"
+                    :options="options"
+                    class="pa-0"
+                    @error="e => $emit('error', e)"
+                    @change="e => $emit('change', e)"
+                    @input="e => $emit('input', e)"
+          />
+        </div>
       </template>
     </template>
 
@@ -741,7 +739,6 @@
     <p v-else-if="options.debug">
       Unsupported type "{{ fullSchema.type }}" - {{ fullSchema }}
     </p>
-
   </v-flex>
 </template>
 
@@ -793,7 +790,7 @@ export default {
           fetch(source).then(res => res.blob()).then(load)
           console.log(source.filename)
         }
-      },
+      }
     }
   },
   computed: {
@@ -917,32 +914,14 @@ export default {
   },
   methods: {
     readFile(file) {
-      console.log(file)
-      let newFiles = []
-
-      // if (file.length) {
-      //   for (let i = 0; i < file.length; i++) {
-      //     newFiles.push(
-      //       {
-      //         'lastModified'     : file[i].lastModified,
-      //         'lastModifiedDate' : file[i].lastModifiedDate,
-      //         'name'             : file[i].name,
-      //         'size'             : file[i].size,
-      //         'type'             : file[i].type
-      //       }
-      //     )
-      //   }
-      //   return newFiles
-      // } else {
-        let newFile = {
-          'lastModified'     : file.source.lastModified,
-          'lastModifiedDate' : file.source.lastModifiedDate,
-          'name'             : file.source.name,
-          'size'             : file.source.size,
-          'type'             : file.source.type
-        }
-        return JSON.stringify(newFile)
-
+      let newFile = {
+        'lastModified': file.source.lastModified,
+        'lastModifiedDate': file.source.lastModifiedDate,
+        'name': file.source.name,
+        'size': file.source.size,
+        'type': file.source.type
+      }
+      return JSON.stringify(newFile)
     },
     handleFilePondInit: function() {
       if (this.fullSchema.format === 'upload') {
@@ -961,7 +940,7 @@ export default {
     handleFileAdd: function() {
       if (this.fullSchema.format === 'upload') {
         console.log('FilePond has added files')
-        this.input()
+        console.log(this.$refs.pond)
       }
       // FilePond instance methods are available on `this.$refs.pond`
     },

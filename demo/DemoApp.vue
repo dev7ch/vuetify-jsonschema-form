@@ -1,45 +1,38 @@
 <template lang="html">
   <v-app>
-    <v-toolbar color="primary" dark fixed app>
-      <v-toolbar-title>vuetify-jsonschema-form demo</v-toolbar-title>
+    <v-toolbar fixed color="teal lighten-3" app>
+      <v-img max-width="210px" src="https://campusderkuenste.ch/logo_hgk_de.svg" />
+      <v-spacer />
+      <v-btn color="yellow lighten" @click="applySchema">
+        Apply
+      </v-btn>
+      <v-btn @click="formatSchema">
+        Format
+      </v-btn>
     </v-toolbar>
     <v-content>
       <v-container fluid grid-list-md>
+        <h1>DIGMA Form Builder</h1>
+        <h3>Create portable schemata for complex input and file upload forms.</h3>
+        <p>Live editing, building, testing and validation.</p>
         <v-layout row>
           <v-flex xs6>
-            <h2 class="title my-4">
-              Schema:
-            </h2>
             <v-layout row wrap>
               <v-flex xs6>
-                <v-select v-model="example" :items="examples" :return-object="true" item-text="title" label="Choose an example" @change="applyExample" />
-              </v-flex>
-              <v-flex xs6>
-                <v-container>
-                  <v-layout row wrap>
-                    <v-spacer />
-                    <v-btn color="primary" @click="applySchema">
-                      Apply
-                    </v-btn>
-                    <v-btn @click="formatSchema">
-                      Format
-                    </v-btn>
-                  </v-layout>
-                </v-container>
+                <v-select v-model="example" :items="examples" :return-object="true" item-text="title" label="Load a template ..." @change="applyExample" />
               </v-flex>
             </v-layout>
             <v-textarea v-model="schemaStr" :error-messages="schemaError ? [schemaError.message] : []" :rows="40" auto-grow />
           </v-flex>
           <v-flex xs6>
             <h2 class="title my-4">
-              Form
               <v-chip v-if="formValid" color="success">
                 valid
               </v-chip>
               <v-chip v-else color="danger">
                 invalid
               </v-chip>
-              <v-btn color="primary" @click="$refs.myForm.validate()">
+              <v-btn color="teal lighten-3" @click="$refs.myForm.validate()">
                 validate
               </v-btn>
             </h2>
