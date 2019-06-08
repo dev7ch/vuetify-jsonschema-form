@@ -1,7 +1,7 @@
 <template lang="html">
   <v-app>
     <v-toolbar fixed color="teal lighten-3" app>
-      <v-img max-width="210px" src="https://campusderkuenste.ch/logo_hgk_de.svg" />
+      <v-toolbar-title>JSON Form builder</v-toolbar-title>
       <v-spacer />
       <v-btn color="yellow lighten" @click="applySchema">
         Apply
