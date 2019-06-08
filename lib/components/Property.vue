@@ -623,7 +623,7 @@
     </template>
 
     <!-- Tuples array sub container -->
-    <div v-else-if="fullSchema.type === 'array' && Array.isArray(fullSchema.items) && fullSchema.format!== 'multiple'">
+    <div v-else-if="fullSchema.type === 'array' && Array.isArray(fullSchema.items) && fullSchema.format !== 'multiple'">
       <v-subheader v-if="fullSchema.title" :style="foldable ? 'cursor:pointer;' :'' " class="mt-2"
                    @click="folded = !folded"
       >
@@ -771,7 +771,6 @@ export default {
       fakeServer: {
         process: (fieldName, file, metadata, load) => {
           // simulates uploading a file
-          console.log(fieldName)
           console.log(file)
           setTimeout(() => {
             load(Date.now())
@@ -938,26 +937,10 @@ export default {
     handleFileAdd: function() {
       if (this.fullSchema.format === 'upload') {
         console.log('FilePond has added files')
-        console.log(this.$refs.pond)
       }
       // FilePond instance methods are available on `this.$refs.pond`
     },
-    handleFileProccess: function() {
-      if (this.fullSchema.format === 'upload') {
-        console.log('UPPPP')
-      }
-      console.log('FilePond has initialized')
 
-      // FilePond instance methods are available on `this.$refs.pond`
-    },
-    handleFileProgress: function() {
-      if (this.fullSchema.format === 'upload') {
-        console.log('Progress')
-      }
-      console.log('FilePond has initialized')
-
-      // FilePond instance methods are available on `this.$refs.pond`
-    },
     updateSelectItems() {
       const selectItems = selectUtils.getSelectItems(this.rawSelectItems, this.fullSchema, this.modelWrapper, this.modelKey, this.itemKey)
       if (this.fullSchema['x-display'] === 'list') {
@@ -1118,7 +1101,7 @@ export default {
       }
 
       // Cleanup arrays of empty items
-      if (this.fullSchema.type === 'array') {
+      if (this.fullSchema.type === 'array' && this.fullSchema.format !== 'multiple') {
         model = model.filter(item => ![undefined, null].includes(item))
       }
 
