@@ -1,7 +1,7 @@
 module.exports = {
   title: 'HGK MEDIA Submission Form',
   schema: {
-    '$id': 'https://mediathek.hgk.fhnw.ch/act.schema.json', // Path to defined Schema or api response
+    '$id': 'https://mediathek.hgk.fhnw.ch/media.schema.json', // Path to defined Schema or api response
     '$schema': 'http://json-schema.org/draft-07/schema#',
     title: 'MEDIA',
     description: 'Schema template example for <a href="https://ba14ns21403.fhnw.ch/mediaserver/app/upload/act.php">this From</a>',
