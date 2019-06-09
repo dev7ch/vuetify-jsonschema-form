@@ -719,7 +719,7 @@
             </v-flex>
           </draggable>
         </v-layout>
-        <v-layout row class="mt-2 mb-1 pr-1">
+        <v-layout row class="mt-2 mb-1 px-0">
           <v-btn color="teal lighten-3" v-if="fullSchema.format === 'multiple'" @click="modelWrapper[modelKey].push(modelWrapper[modelKey][0][0])" primary>
             <v-icon>add</v-icon>
           </v-btn>
@@ -736,16 +736,19 @@
     <!-- Dynamic size array of complex types sub container -->
     <div v-else-if="fullSchema.type === 'array'">
       <v-layout row class="mt-2 mb-1 pr-1">
-        <v-spacer />
-        <v-tooltip v-if="fullSchema.description" left>
-          <v-icon slot="activator">
-            info
-          </v-icon>
-          <div class="vjsf-tooltip" v-html="htmlDescription" />
-        </v-tooltip>
+        <v-subheader class="pl-1">
+          {{ label }}
+          &nbsp;&nbsp;
+          <v-tooltip v-if="fullSchema.description" left>
+            <v-icon slot="activator">
+              info
+            </v-icon>
+            <div class="vjsf-tooltip" v-html="htmlDescription" />
+          </v-tooltip>
+        </v-subheader>
       </v-layout>
 
-      <v-container v-if="modelWrapper[modelKey] && modelWrapper[modelKey].length" grid-list-md class="pt-0 px-2">
+      <v-container v-if="modelWrapper[modelKey] && modelWrapper[modelKey].length" grid-list-md class="pt-0 px-0">
         <v-layout row wrap>
           <draggable v-model="modelWrapper[modelKey]" :options="{handle:'.handle'}" style="width: 100%;">
             <v-flex v-for="(itemModel, i) in modelWrapper[modelKey]" :key="i" xs12>
@@ -779,10 +782,11 @@
       </v-container>
 
       <v-btn  v-if="!disabled && !(fromUrl || fullSchema.fromData)"
+              class="ml-0 mb-2"
               color="teal lighten-3"
               @click="modelWrapper[modelKey].push(fullSchema.items.default || defaultValue(fullSchema.items)); change(); input()">
-        {{ label }}
         <v-icon>add</v-icon>
+        {{ label }}
       </v-btn>
     </div>
     <p v-else-if="options.debug">
