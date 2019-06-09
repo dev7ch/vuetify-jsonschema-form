@@ -23,7 +23,7 @@ module.exports = {
       persons: {
         type: 'array',
         title: 'Persons',
-        description: 'A list of vegetables as editable objects.',
+        description: 'A list people involved.',
         items: [{ '$ref': '#/definitions/personEntity' }]
       },
       work: {

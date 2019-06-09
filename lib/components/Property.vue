@@ -733,7 +733,55 @@
         </v-layout>
       </v-container>
     </div>
+    <!-- Dynamic size array of complex types sub container -->
+    <div v-else-if="fullSchema.type === 'array'">
+      <v-layout row class="mt-2 mb-1 pr-1">
+        <v-subheader>{{ label }}</v-subheader>
+        <v-btn v-if="!disabled && !(fromUrl || fullSchema.fromData)" icon color="primary" @click="modelWrapper[modelKey].push(fullSchema.items.default || defaultValue(fullSchema.items)); change(); input()">
+          <v-icon>add</v-icon>
+        </v-btn>
+        <v-spacer />
+        <v-tooltip v-if="fullSchema.description" left>
+          <v-icon slot="activator">
+            info
+          </v-icon>
+          <div class="vjsf-tooltip" v-html="htmlDescription" />
+        </v-tooltip>
+      </v-layout>
 
+      <v-container v-if="modelWrapper[modelKey] && modelWrapper[modelKey].length" grid-list-md class="pt-0 px-2">
+        <v-layout row wrap>
+          <draggable v-model="modelWrapper[modelKey]" :options="{handle:'.handle'}" style="width: 100%;">
+            <v-flex v-for="(itemModel, i) in modelWrapper[modelKey]" :key="i" xs12>
+              <v-card class="array-card">
+                <v-card-title primary-title class="pa-0">
+                  <v-btn v-if="!disabled && fullSchema['x-sortable'] !== false" flat icon class="handle">
+                    <v-icon>reorder</v-icon>
+                  </v-btn>
+                  <span v-if="itemTitle && modelWrapper[modelKey][i]">{{ modelWrapper[modelKey][i][itemTitle] }}</span>
+                  <v-spacer />
+                  <v-btn v-if="!disabled && !(fromUrl || fullSchema.fromData)" flat icon color="warning" @click="modelWrapper[modelKey].splice(i, 1); change(); input()">
+                    <v-icon>delete</v-icon>
+                  </v-btn>
+                </v-card-title>
+                <v-card-text>
+                  <property :schema="fullSchema.items"
+                            :model-wrapper="modelWrapper[modelKey]"
+                            :model-root="modelRoot"
+                            :model-key="i"
+                            :parent-key="`${fullKey}.`"
+                            :options="options"
+                            @error="e => $emit('error', e)"
+                            @change="e => $emit('change', e)"
+                            @input="e => $emit('input', e)"
+                  />
+                </v-card-text>
+              </v-card>
+            </v-flex>
+          </draggable>
+        </v-layout>
+      </v-container>
+    </div>
     <p v-else-if="options.debug">
       Unsupported type "{{ fullSchema.type }}" - {{ fullSchema }}
     </p>

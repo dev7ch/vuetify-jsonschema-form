@@ -38,12 +38,5 @@ module.exports = {
         }
       }
     }
-  },
-  data: {
-    presentation: 'lorem ipsum',
-    twitter: 'koumoul_fr',
-    type: 'physicalPerson',
-    firstName: 'Alban',
-    lastName: 'Mouton'
   }
 }
