@@ -24,7 +24,7 @@ module.exports = {
         type: 'array',
         title: 'Persons',
         description: 'A list of vegetables as editable objects.',
-        items: { '$ref': '#/definitions/personEntity' }
+        items: [{ '$ref': '#/definitions/personEntity' }]
       },
       work: {
         type: 'object',
