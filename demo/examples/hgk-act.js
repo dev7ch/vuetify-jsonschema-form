@@ -312,7 +312,6 @@ module.exports = {
           },
           research: {
             title: 'Research',
-            type: 'number',
             minimum: 0,
             'x-itemClass': 'xs4'
           }

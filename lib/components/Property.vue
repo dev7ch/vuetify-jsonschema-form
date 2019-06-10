@@ -522,30 +522,30 @@
         <v-responsive
           :height="fullSchema.properties['x-height']? fullSchema.properties['x-height'] + 'px' : '360px'"
         >
-          <v-stage ref="stage" class="mx-auto" :config="{
-            width: fullSchema['x-height'] ? fullSchema['x-height'] : 360,
-            height: fullSchema['x-height'] ? fullSchema['x-height'] : 360
+          <v-stage ref="stage" :style="{marginTop:fullSchema['x-stage-top'] ? fullSchema['x-stage-top'] : '50px'}" class="mx-auto" :config="{
+            width: fullSchema['x-stage-width'] ? fullSchema['x-stage-width'] : 360,
+            height: fullSchema['x-stage-height'] ? fullSchema['x-stage-height'] : 360
           }"
           >
             <v-layer ref="layer">
               <v-regular-polygon
                 :config="{
-                  x: fullSchema['x-pos-x'] ? fullSchema['x-pos-x'] : 160,
-                  y: fullSchema['x-pos-y'] ? fullSchema['x-pos-y'] : 160,
-                  sides: fullSchema['x-sides'] ? fullSchema['x-sides'] : 3,
-                  radius: fullSchema['x-radius'] ? fullSchema['x-radius'] : 127,
-                  fill: fullSchema['x-fill'] ? fullSchema['x-fill'] : '#ffeb3b',
-                  stroke: fullSchema['x-stroke-color'] ? fullSchema['x-stroke-color'] : '#80cbc4',
-                  strokeWidth: fullSchema['x-stroke-width'] ? fullSchema['x-stroke-width'] : 2,
+                  x: fullSchema['x-poly-x'] ? fullSchema['x-poly-x'] : 160,
+                  y: fullSchema['x-poly-y'] ? fullSchema['x-poly-y'] : 160,
+                  sides: fullSchema['x-poly-sides'] ? fullSchema['x-poly-sides'] : 3,
+                  radius: fullSchema['x-poly-radius'] ? fullSchema['x-poly-radius'] : 127,
+                  fill: fullSchema['x-poly-fill'] ? fullSchema['x-poly-fill'] : '#ffeb3b',
+                  stroke: fullSchema['x-poly-stroke-color'] ? fullSchema['x-poly-stroke-color'] : '#80cbc4',
+                  strokeWidth: fullSchema['x-poly-stroke-width'] ? fullSchema['x-poly-stroke-width'] : 2,
                 }"
               />
               <v-circle ref="cirlce" :config="{
-                x: fullSchema['x-pos-x'] ? fullSchema['x-pos-x'] : 160,
-                y: fullSchema['x-pos-y'] ? fullSchema['x-pos-y'] : 160 - 8,
-                radius: fullSchema['x-radius'] ? fullSchema['x-radius'] : 16,
-                fill: fullSchema['x-fill'] ? fullSchema['x-fill'] : '#80cbc4',
-                stroke: fullSchema['x-stroke-color'] ? fullSchema['x-stroke-color'] : '#80cbc4',
-                strokeWidth: fullSchema['x-stroke-width'] ? fullSchema['x-stroke-width'] : 0,
+                x: fullSchema['x-circle-x'] ? fullSchema['x-circle-x'] : 160,
+                y: fullSchema['x-circle-y'] ? fullSchema['x-circle-y'] : 160 - 8,
+                radius: fullSchema['x-circle-radius'] ? fullSchema['x-circle-radius'] : 16,
+                fill: fullSchema['x-circle-fill'] ? fullSchema['x-circle-fill'] : '#80cbc4',
+                stroke: fullSchema['x-circle-stroke-color'] ? fullSchema['x-circle-stroke-color'] : '#80cbc4',
+                strokeWidth: fullSchema['x-circle-stroke-width'] ? fullSchema['x-circle-stroke-width'] : 0,
                 draggable: true
               }" @dragend="handleKovaDrag(fullKey, modelWrapper[modelKey])"
               />
