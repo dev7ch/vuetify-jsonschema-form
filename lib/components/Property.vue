@@ -518,7 +518,7 @@
           />
         </v-layout>
       </v-slide-y-transition>
-      <v-card>
+      <v-card color="rgba(255, 255, 255, 0)">
         <v-responsive
           height="380px"
         >
@@ -534,9 +534,8 @@
                   stroke: 'black',
                   strokeWidth: 4
                 }"
-                @mouseout="handleMouseOut"
               />
-              <v-circle ref="cirlce" :config="configCircle" @dragend="handleKovaDrag(modelWrapper[modelKey])" />
+              <v-circle ref="cirlce" :config="configCircle" @dragend="handleKovaDrag(fullKey, modelWrapper[modelKey])" />
               <v-text ref="text" :config="{
                 x: 20,
                 y: 280,
@@ -545,11 +544,11 @@
                 fill: 'black'
               }"
               />
-              <v-text v-for="(item, ix) in fullSchema.properties" :key="ix" ref="lables" :config="{
+              <v-text v-for="(item, ix) in fullSchema.properties" :key="ix" ref="labels" :config="{
                 x: ix !== 1 ? (ix !== 0 ? (ix + 1) * 95 : 140) : 1,
                 y: ix !== 1 ? (ix !== 0 ? ix * 100 : 10 ) : 200,
                 fontFamily: 'Helvetica',
-                fontSize: 16,
+                fontSize: 17,
                 fill: 'black',
                 text: item.title ? item.title : item.key
               }"
@@ -1092,6 +1091,9 @@ export default {
   },
   methods: {
 
+    simpleIndex(obj, i) {
+      return obj[i]
+    },
     removeEmpty(obj) {
       return Object.keys(obj || {}).reduce((x, k) => {
         if (obj[k] != null) {
@@ -1101,28 +1103,30 @@ export default {
       }, {})
     },
 
-    calcDistance(p, q, key) {
+    calcDistance(p, q, key, model) {
       const dx = p.x - q.x
       const dy = p.y - q.y
       const dist = Math.sqrt(dx * dx + dy * dy)
-      console.log(key, dist)
-      this.modelRoot[this.modelKey][key] = 280 - dist
-      // return console.log(center, newPos, attrs)
+      let transformedKey = null
+
+      if (key.includes('.')) {
+        transformedKey = key.split('.').reduce(this.simpleIndex, this.modelRoot)
+      }
+
+      transformedKey[model] = 280 - dist
     },
-    handleKovaDrag(key = null) {
+    handleKovaDrag(key = null, model = null) {
       const layer = this.$refs.layer.getNode()
       const newPos = layer.children.map(e => e._lastPos)
       this.currentKonvaPos = { ...this.removeEmpty(newPos[1]) }
-      for (let i = 0; i < this.$refs.lables.length; i++) {
+      for (let i = 0; i < this.$refs.labels.length; i++) {
         this.calcDistance(
           { ...this.currentKonvaPos },
-          this.$refs.lables[i].getNode()['attrs'],
-          Object.keys(key)[i]
+          this.$refs.labels[i].getNode()['attrs'],
+          key,
+          Object.keys(model)[i]
         )
       }
-    },
-    handleMouseOut(event) {
-      console.log('Left Triangle ....')
     },
 
     readFile(file) {

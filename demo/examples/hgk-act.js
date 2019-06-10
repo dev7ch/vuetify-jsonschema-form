@@ -16,9 +16,19 @@ module.exports = {
         'title': 'Performance Title',
         'x-itemClass': 'md7 xs12'
       },
-      triangle: {
+      rico: {
         type: 'object',
-        $ref: '#/definitions/impactOutputEntity'
+        properties: {
+          impact: {
+            type: 'object',
+            properties: {
+              output: {
+                type: 'object',
+                $ref: '#/definitions/impactOutputEntity'
+              }
+            }
+          }
+        }
       },
       event: {
         type: 'array',
