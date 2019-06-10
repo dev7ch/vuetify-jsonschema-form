@@ -294,7 +294,6 @@ module.exports = {
       impactOutputEntity: {
         description: 'Lorem ipsum ...',
         type: 'object',
-        format: 'group',
         'x-format': 'triangle',
         title: 'Output / Aktivität',
         properties: {
