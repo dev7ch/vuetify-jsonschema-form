@@ -481,7 +481,7 @@
         </div>
       </template>
     </template>
-    <template v-else-if="fullSchema.type === 'object' && fullSchema['x-format'] === 'triangle'">
+    <template v-else-if="fullSchema.type === 'object' && (fullSchema['x-format'] === 'triangle' || fullSchema['x-format'] === 'canvas')">
       <v-subheader v-if="fullSchema.title && fullSchema.format !== 'inline'" :style="foldable ? 'cursor:pointer;' :'' "
                    class="mt-2"
                    @click="folded = !folded"
@@ -520,22 +520,34 @@
       </v-slide-y-transition>
       <v-card color="rgba(255, 255, 255, 0)">
         <v-responsive
-          height="380px"
+          :height="fullSchema.properties['x-height']? fullSchema.properties['x-height'] + 'px' : '360px'"
         >
-          <v-stage ref="stage" class="mx-auto" :config="configKonva">
+          
+          <v-stage ref="stage" class="mx-auto" :config="{
+                width: fullSchema['x-height'] ? fullSchema['x-height'] : 360,
+                height:  fullSchema['x-height'] ? fullSchema['x-height'] : 360
+            }">
             <v-layer ref="layer">
               <v-regular-polygon
                 :config="{
-                  x: 160,
-                  y: 160,
-                  sides: 3,
-                  radius: 127,
-                  fill: '#00D2FF',
-                  stroke: 'black',
-                  strokeWidth: 4
+                  x: fullSchema['x-pos-x'] ?  fullSchema['x-pos-x'] : 160,
+                  y: fullSchema['x-pos-y'] ?  fullSchema['x-pos-y'] : 160,
+                  sides:  fullSchema['x-sides'] ?  fullSchema['x-sides'] : 3,
+                  radius:  fullSchema['x-radius'] ? fullSchema['x-radius'] : 127,
+                  fill: fullSchema['x-fill'] ? fullSchema['x-fill'] : '#ffeb3b',
+                  stroke: fullSchema['x-stroke-color'] ? fullSchema['x-stroke-color'] : '#80cbc4',
+                  strokeWidth: fullSchema['x-stroke-width'] ? fullSchema['x-stroke-width'] : 2,
                 }"
               />
-              <v-circle ref="cirlce" :config="configCircle" @dragend="handleKovaDrag(fullKey, modelWrapper[modelKey])" />
+              <v-circle ref="cirlce" :config="{
+                  x: fullSchema['x-pos-x'] ?  fullSchema['x-pos-x'] : 160,
+                  y: fullSchema['x-pos-y'] ?  fullSchema['x-pos-y'] : 160 - 8,
+                  radius:  fullSchema['x-radius'] ? fullSchema['x-radius'] : 16,
+                  fill: fullSchema['x-fill'] ? fullSchema['x-fill'] : '#80cbc4',
+                  stroke: fullSchema['x-stroke-color'] ? fullSchema['x-stroke-color'] : '#80cbc4',
+                  strokeWidth: fullSchema['x-stroke-width'] ? fullSchema['x-stroke-width'] : 0,
+                  draggable: true
+                }" @dragend="handleKovaDrag(fullKey, modelWrapper[modelKey])" />
               <v-text ref="text" :config="{
                 x: 20,
                 y: 280,
@@ -545,11 +557,11 @@
               }"
               />
               <v-text v-for="(item, ix) in fullSchema.properties" :key="ix" ref="labels" :config="{
-                x: ix !== 1 ? (ix !== 0 ? (ix + 1) * 95 : 140) : 1,
-                y: ix !== 1 ? (ix !== 0 ? ix * 100 : 10 ) : 200,
-                fontFamily: 'Helvetica',
-                fontSize: 17,
-                fill: 'black',
+                x: item['x-pos-x'] ? item['x-pos-x'] : (ix !== 1 ? (ix !== 0 ? (ix + 1) * 95 : 140) : 1),
+                y: item['x-pos-y'] ? item['x-pos-y'] : (ix !== 1 ? (ix !== 0 ? ix * 100 : 10 ) : 200),
+                fontFamily:  item['x-font-family'] ? item['x-font-family'] : 'Roboto',
+                fontSize:  item['x-font-size'] ? item['x-font-size'] : 17,
+                fill: item['x-fill'] ? item['x-fill'] : 'black',
                 text: item.title ? item.title : item.key
               }"
               />
@@ -933,19 +945,6 @@ export default {
       folded: true,
       showColorPicker: false,
       subModels: {}, // a container for objects from root oneOfs and allOfs
-      configKonva: {
-        width: '360',
-        height: '360'
-      },
-      configCircle: {
-        x: 160,
-        y: 160 - 8,
-        radius: 16,
-        fill: 'green',
-        stroke: 'black',
-        strokeWidth: 1,
-        draggable: true
-      },
       triangleLabel: {},
       currentKonvaPos: null,
       fakeServer: {

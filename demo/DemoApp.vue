@@ -22,7 +22,7 @@
                 <v-select v-model="example" :items="examples" :return-object="true" item-text="title" label="Load a template ..." @change="applyExample" />
               </v-flex>
             </v-layout>
-            <v-textarea v-model="schemaStr" :error-messages="schemaError ? [schemaError.message] : []" :rows="40" auto-grow />
+            <v-textarea v-model="schemaStr" :error-messages="schemaError ? [schemaError.message] : []" :rows="40" />
           </v-flex>
           <v-flex xs6>
             <h2 class="title my-4">
