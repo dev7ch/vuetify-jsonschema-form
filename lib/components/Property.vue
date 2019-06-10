@@ -481,7 +481,7 @@
         </div>
       </template>
     </template>
-    <template v-else-if="fullSchema.type === 'object' && fullSchema.format === 'triangle'">
+    <template v-else-if="fullSchema.type === 'object' && fullSchema['x-format'] === 'triangle'">
       <v-subheader v-if="fullSchema.title && fullSchema.format !== 'inline'" :style="foldable ? 'cursor:pointer;' :'' "
                    class="mt-2"
                    @click="folded = !folded"
@@ -500,7 +500,7 @@
         <p v-if="fullSchema.description" v-html="fullSchema.description"/>
       </template>
       <v-slide-y-transition>
-        <div v-show="!foldable || !folded" v-if="fullSchema.format !== 'inline'">
+        <v-layout v-show="!foldable || !folded">
           <!--          <p v-if="fullSchema.description" v-html="fullSchema.description" />-->
           <property v-for="childProp in fullSchema.properties" :key="childProp.key"
                     :schema="childProp"
@@ -513,35 +513,18 @@
                     @error="e => $emit('error', e)"
                     @change="e => $emit('change', e)"
                     @input="e => $emit('input', e)"
-          />
-        </div>
-        <v-layout v-else-if="fullSchema.format === 'inline'" wrap
-                  justify-space-between
-        >
-          <property v-for="childProp in fullSchema.properties" :key="childProp.key"
-                    class="xs12"
-                    :schema="childProp"
-                    :model-wrapper="modelWrapper[modelKey]"
-                    :model-root="modelRoot"
-                    :model-key="childProp.key"
-                    :parent-key="fullKey + '.'"
-                    :required="!!(fullSchema.required && fullSchema.required.includes(childProp.key))"
-                    :options="options"
-                    @error="e => $emit('error', e)"
-                    @change="e => $emit('change', e)"
-                    @input="e => $emit('input', e)"
+                    :readonly="true"
+                    style="visibility:hidden;height:0;"
           />
         </v-layout>
       </v-slide-y-transition>
-
-      <v-card class="e4">
+      <v-card>
         <v-responsive
             height="380px"
         >
           <v-stage class="mx-auto" ref="stage" :config="configKonva">
             <v-layer ref="layer">
               <v-regular-polygon
-                  @mousemove="handleMouseMove"
                   @mouseout="handleMouseOut"
                   :config="{
             x: 160,
@@ -559,7 +542,6 @@
           y: 280,
           fontFamily: 'Helvetica',
           fontSize: 16,
-          text: konvaText,
           fill: 'black'
         }"/>
               <v-text v-for="(item, ix) in fullSchema.properties" :key="ix" :config="{
@@ -592,6 +574,7 @@
                   <v-slider
                       v-model="modelWrapper[modelKey][item.key]"
                       :max="250"
+                      disabled
                   />
                 </v-flex>
               </v-layout>
@@ -959,7 +942,6 @@
           strokeWidth: 1,
           draggable: true
         },
-        konvaText: null,
         triangleLabel: {},
         currentKonvaPos: null,
         fakeServer: {
@@ -1134,18 +1116,10 @@
           )
         }
       },
-      writeMessage(message) {
-        this.konvaText = message
-      },
       handleMouseOut(event) {
-        this.writeMessage('Drag the dot ...')
+        console.log('Left Triangle ....')
       },
-      handleMouseMove(event) {
-        const mousePos = this.$refs.stage.getStage().getPointerPosition()
-        const x = mousePos.x
-        const y = mousePos.y
-        this.writeMessage('x: ' + x + ', y: ' + y)
-      },
+
       readFile(file) {
         let newFile = {
           'lastModified': file.source.lastModified,

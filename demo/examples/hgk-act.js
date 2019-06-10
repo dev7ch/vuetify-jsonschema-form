@@ -284,26 +284,27 @@ module.exports = {
       impactOutputEntity: {
         description: 'Lorem ipsum ...',
         type: 'object',
-        format: 'triangle',
+        format: 'group',
+        'x-format': 'triangle',
         title: 'Output / Aktivität',
         properties: {
           study: {
             title: 'Lehre',
             type: 'number',
-            maximum: 1,
-            minimum: 0
+            minimum: 0,
+            'x-itemClass': 'xs4'
           },
           lab: {
             title: 'Lab',
             type: 'number',
-            maximum: 1,
-            minimum: 0
+            minimum: 0,
+            'x-itemClass': 'xs4'
           },
           research: {
             title: 'Research',
             type: 'number',
-            maximum: 1,
-            minimum: 0
+            minimum: 0,
+            'x-itemClass': 'xs4'
           }
         }
       }
