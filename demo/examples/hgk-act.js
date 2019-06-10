@@ -16,6 +16,10 @@ module.exports = {
         'title': 'Performance Title',
         'x-itemClass': 'md7 xs12'
       },
+      triangle: {
+        type: 'object',
+        $ref: '#/definitions/impactOutputEntity'
+      },
       event: {
         type: 'array',
         title: null,
@@ -275,6 +279,32 @@ module.exports = {
           //     enum: []
           //   }
           // }
+        }
+      },
+      impactOutputEntity: {
+        description: 'Lorem ipsum ...',
+        type: 'object',
+        format: 'triangle',
+        title: 'Output / Aktivität',
+        properties: {
+          study: {
+            title: 'Lehre',
+            type: 'number',
+            maximum: 1,
+            minimum: 0
+          },
+          lab: {
+            title: 'Lab',
+            type: 'number',
+            maximum: 1,
+            minimum: 0
+          },
+          research: {
+            title: 'Research',
+            type: 'number',
+            maximum: 1,
+            minimum: 0
+          }
         }
       }
     }

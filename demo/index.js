@@ -13,6 +13,7 @@ import 'filepond/dist/filepond.min.css'
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css'
 import FilePondPluginFileMetadata from 'filepond-plugin-file-metadata'
+import VueKonva from 'vue-konva'
 
 Vue.use(Vuetify)
 Vue.use(VueAxios, axios)
@@ -20,6 +21,7 @@ Vue.use(VueAxios, axios)
 Vue.component('swatches', Swatches)
 Vue.component('draggable', Draggable)
 Vue.component('color-picker', Sketch)
+Vue.use(VueKonva)
 
 new Vue({
   el: '#app',
