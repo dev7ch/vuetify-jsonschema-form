@@ -522,32 +522,33 @@
         <v-responsive
           :height="fullSchema.properties['x-height']? fullSchema.properties['x-height'] + 'px' : '360px'"
         >
-          
           <v-stage ref="stage" class="mx-auto" :config="{
-                width: fullSchema['x-height'] ? fullSchema['x-height'] : 360,
-                height:  fullSchema['x-height'] ? fullSchema['x-height'] : 360
-            }">
+            width: fullSchema['x-height'] ? fullSchema['x-height'] : 360,
+            height: fullSchema['x-height'] ? fullSchema['x-height'] : 360
+          }"
+          >
             <v-layer ref="layer">
               <v-regular-polygon
                 :config="{
-                  x: fullSchema['x-pos-x'] ?  fullSchema['x-pos-x'] : 160,
-                  y: fullSchema['x-pos-y'] ?  fullSchema['x-pos-y'] : 160,
-                  sides:  fullSchema['x-sides'] ?  fullSchema['x-sides'] : 3,
-                  radius:  fullSchema['x-radius'] ? fullSchema['x-radius'] : 127,
+                  x: fullSchema['x-pos-x'] ? fullSchema['x-pos-x'] : 160,
+                  y: fullSchema['x-pos-y'] ? fullSchema['x-pos-y'] : 160,
+                  sides: fullSchema['x-sides'] ? fullSchema['x-sides'] : 3,
+                  radius: fullSchema['x-radius'] ? fullSchema['x-radius'] : 127,
                   fill: fullSchema['x-fill'] ? fullSchema['x-fill'] : '#ffeb3b',
                   stroke: fullSchema['x-stroke-color'] ? fullSchema['x-stroke-color'] : '#80cbc4',
                   strokeWidth: fullSchema['x-stroke-width'] ? fullSchema['x-stroke-width'] : 2,
                 }"
               />
               <v-circle ref="cirlce" :config="{
-                  x: fullSchema['x-pos-x'] ?  fullSchema['x-pos-x'] : 160,
-                  y: fullSchema['x-pos-y'] ?  fullSchema['x-pos-y'] : 160 - 8,
-                  radius:  fullSchema['x-radius'] ? fullSchema['x-radius'] : 16,
-                  fill: fullSchema['x-fill'] ? fullSchema['x-fill'] : '#80cbc4',
-                  stroke: fullSchema['x-stroke-color'] ? fullSchema['x-stroke-color'] : '#80cbc4',
-                  strokeWidth: fullSchema['x-stroke-width'] ? fullSchema['x-stroke-width'] : 0,
-                  draggable: true
-                }" @dragend="handleKovaDrag(fullKey, modelWrapper[modelKey])" />
+                x: fullSchema['x-pos-x'] ? fullSchema['x-pos-x'] : 160,
+                y: fullSchema['x-pos-y'] ? fullSchema['x-pos-y'] : 160 - 8,
+                radius: fullSchema['x-radius'] ? fullSchema['x-radius'] : 16,
+                fill: fullSchema['x-fill'] ? fullSchema['x-fill'] : '#80cbc4',
+                stroke: fullSchema['x-stroke-color'] ? fullSchema['x-stroke-color'] : '#80cbc4',
+                strokeWidth: fullSchema['x-stroke-width'] ? fullSchema['x-stroke-width'] : 0,
+                draggable: true
+              }" @dragend="handleKovaDrag(fullKey, modelWrapper[modelKey])"
+              />
               <v-text ref="text" :config="{
                 x: 20,
                 y: 280,
@@ -559,8 +560,8 @@
               <v-text v-for="(item, ix) in fullSchema.properties" :key="ix" ref="labels" :config="{
                 x: item['x-pos-x'] ? item['x-pos-x'] : (ix !== 1 ? (ix !== 0 ? (ix + 1) * 95 : 140) : 1),
                 y: item['x-pos-y'] ? item['x-pos-y'] : (ix !== 1 ? (ix !== 0 ? ix * 100 : 10 ) : 200),
-                fontFamily:  item['x-font-family'] ? item['x-font-family'] : 'Roboto',
-                fontSize:  item['x-font-size'] ? item['x-font-size'] : 17,
+                fontFamily: item['x-font-family'] ? item['x-font-family'] : 'Roboto',
+                fontSize: item['x-font-size'] ? item['x-font-size'] : 17,
                 fill: item['x-fill'] ? item['x-fill'] : 'black',
                 text: item.title ? item.title : item.key
               }"
