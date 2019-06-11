@@ -200,13 +200,13 @@
         <template slot="selection" slot-scope="data">
           <div class="v-select__selection v-select__selection--comma">
             <select-icon v-if="itemIcon" :value="data.item[itemIcon]" />
-            <span v-if="![null, undefined].includes(data.item[itemTitle])">{{ data.item[itemTitle] + (fullSchema.type === 'array' && data.index !== modelWrapper[modelKey].length - 1 ? ',&nbsp;' : '') }}</span>
+            <span v-if="![null, undefined].includes(data.item[itemTitle])" v-html="data.item[itemTitle]">{{ (fullSchema.type === 'array' && data.index !== modelWrapper[modelKey].length - 1 ? ',&nbsp;' : '') }}</span>
           </div>
         </template>
         <template slot="item" slot-scope="data">
           <select-icon v-if="itemIcon" :value="data.item[itemIcon]" />
           <v-list-tile-content>
-            <v-list-tile-title>{{ data.item[itemTitle] }}</v-list-tile-title>
+            <v-list-tile-title v-html="data.item[itemTitle]"></v-list-tile-title>
           </v-list-tile-content>
         </template>
 
@@ -291,7 +291,7 @@
       <template slot="item" slot-scope="data">
         <select-icon v-if="itemIcon" :value="data.item[itemIcon]" />
         <v-list-tile-content>
-          <v-list-tile-title>{{ data.item[itemTitle] }}</v-list-tile-title>
+          <v-list-tile-title>{{ data.item[itemTitle]  }}</v-list-tile-title>
         </v-list-tile-content>
       </template>
 
