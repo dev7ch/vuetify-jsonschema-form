@@ -597,6 +597,7 @@
       </v-card>
     </template>
 
+    <!-- Object sub container with properties that may include a select based on a oneOf and subparts base on a allOf -->
     <template v-else-if="fullSchema.type === 'object'">
       <v-subheader v-if="fullSchema.title && fullSchema.format !== 'inline'" :style="foldable ? 'cursor:pointer;' :'' "
                    class="mt-2"
@@ -739,9 +740,7 @@
     </template>
 
     <!-- Tuples array sub container -->
-    <template
-      v-else-if="fullSchema.type === 'array' && Array.isArray(fullSchema.items) && fullSchema.format !== 'multiple'"
-    >
+    <template v-else-if="fullSchema.type === 'array' && Array.isArray(fullSchema.items) && fullSchema.format !== 'multiple'">
       <v-subheader v-if="fullSchema.title" :style="foldable ? 'cursor:pointer;' :'' " class="mt-2"
                    @click="folded = !folded"
       >
@@ -1109,7 +1108,13 @@ export default {
       const dist = Math.sqrt(dx * dx + dy * dy)
       let transformedKey = null
 
+
+      console.log(key.replace(/allOf-([0-9]+)\./g, ''))
+      console.log(this.modelWrapper)
+      console.log(model)
+
       if (key.includes('.')) {
+        key.replace(/allOf-([0-9]+)\./g, '')
         transformedKey = key.split('.').reduce(this.simpleIndex, this.modelRoot)
       }
 
@@ -1369,6 +1374,17 @@ export default {
     margin-top: 20px;
     left: 50%;
     transform: translate(-50%);
+  }
+  .v-text-field__details:empty, .v-messages__wrapper:empty, .vjsf-property:empty {
+    display: none;
+  }
+
+  .flex.vjsf-property {
+    padding: 0;
+  }
+
+ .container.grid-list-md .layout .flex.vjsf-property {
+    padding: 0;
   }
 
 </style>
