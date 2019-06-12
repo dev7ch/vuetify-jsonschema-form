@@ -220,7 +220,7 @@
     </template>
 
     <!-- Select field on an ajax response or from an array in another part of the data -->
-    <v-select v-else-if="fullSchema['x-display'] !== 'list' && (fromUrl || fullSchema['x-fromData'])"node
+    <v-select v-else-if="fullSchema['x-display'] !== 'list' && (fromUrl || fullSchema['x-fromData'])"
               v-model="modelWrapper[modelKey]"
               :items="selectItems"
               :name="fullKey"
@@ -1107,11 +1107,9 @@ export default {
       const dy = p.y - q.y
       const dist = Math.sqrt(dx * dx + dy * dy)
       let transformedKey = null
-
-
-      console.log(key.replace(/allOf-([0-9]+)\./g, ''))
-      console.log(this.modelWrapper)
-      console.log(model)
+      // console.log(key.replace(/allOf-([0-9]+)\./g, ''))
+      // console.log(this.modelWrapper)
+      // console.log(model)
 
       if (key.includes('.')) {
         key.replace(/allOf-([0-9]+)\./g, '')
