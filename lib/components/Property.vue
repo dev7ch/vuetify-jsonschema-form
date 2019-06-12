@@ -206,7 +206,7 @@
         <template slot="item" slot-scope="data">
           <select-icon v-if="itemIcon" :value="data.item[itemIcon]" />
           <v-list-tile-content>
-            <v-list-tile-title v-html="data.item[itemTitle]"></v-list-tile-title>
+            <v-list-tile-title v-html="data.item[itemTitle]" />
           </v-list-tile-content>
         </template>
 
@@ -291,7 +291,7 @@
       <template slot="item" slot-scope="data">
         <select-icon v-if="itemIcon" :value="data.item[itemIcon]" />
         <v-list-tile-content>
-          <v-list-tile-title>{{ data.item[itemTitle]  }}</v-list-tile-title>
+          <v-list-tile-title>{{ data.item[itemTitle] }}</v-list-tile-title>
         </v-list-tile-content>
       </template>
 
@@ -1107,7 +1107,6 @@ export default {
       const dy = p.y - q.y
       const dist = Math.sqrt(dx * dx + dy * dy)
       let transformedKey = null
-
 
       console.log(key.replace(/allOf-([0-9]+)\./g, ''))
       console.log(this.modelWrapper)
