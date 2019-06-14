@@ -772,8 +772,8 @@
     </template>
 
     <!-- Dynamic size array of complex types sub container -->
-    <template v-else-if="fullSchema.type === 'array' && fullSchema.format === 'group'">
-      <v-form v-if="modelWrapper[modelKey] && modelWrapper[modelKey].length" grid-list-md class="form-group">
+    <div class="form-group" v-else-if="fullSchema.type === 'array' && fullSchema.format === 'group'">
+      <v-form v-if="modelWrapper[modelKey] && modelWrapper[modelKey].length" grid-list-md>
         <v-subheader v-if="fullSchema.title">
           {{ label }}
         </v-subheader>
@@ -800,7 +800,7 @@
           </v-tooltip>
         </v-layout>
       </v-form>
-    </template>
+    </div>
     <template v-else-if="fullSchema.type === 'array' && fullSchema.format === 'multiple' ">
       <v-container v-if="modelWrapper[modelKey] && modelWrapper[modelKey].length" grid-list-md class="pt-0 px-0">
         <v-subheader>{{ label }}</v-subheader>
@@ -1379,6 +1379,10 @@ export default {
 
   .flex.vjsf-property {
     padding: 0;
+  }
+
+  .v-subheader + div:not(.vjsf-property) {
+    border: 1px solid black;
   }
 
  .container.grid-list-md .layout .flex.vjsf-property {
