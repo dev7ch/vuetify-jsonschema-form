@@ -549,14 +549,6 @@
                 draggable: true
               }" @dragend="handleKovaDrag(fullKey, modelWrapper[modelKey])"
               />
-              <v-text ref="text" :config="{
-                x: 20,
-                y: 280,
-                fontFamily: 'Helvetica',
-                fontSize: 16,
-                fill: 'black'
-              }"
-              />
               <v-text v-for="(item, ix) in fullSchema.properties" :key="ix" ref="labels" :config="{
                 x: item['x-pos-x'] ? item['x-pos-x'] : (ix !== 1 ? (ix !== 0 ? (ix + 1) * 95 : 140) : 1),
                 y: item['x-pos-y'] ? item['x-pos-y'] : (ix !== 1 ? (ix !== 0 ? ix * 100 : 10 ) : 200),
@@ -1379,10 +1371,6 @@ export default {
 
   .flex.vjsf-property {
     padding: 0;
-  }
-
-  .v-subheader + div:not(.vjsf-property) {
-    border: 1px solid black;
   }
 
  .container.grid-list-md .layout .flex.vjsf-property {
